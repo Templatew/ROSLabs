@@ -164,7 +164,7 @@
     <depend>geometry_msgs</depend>
     ```
 
-- Perfect ! Now we simply need to build our package, run it and turtlesim to enjoy a turtle make circles. xD
+- Perfect ! Now we simply need to build our package, run it and turtlesim to enjoy a turtle making circles. xD
 
 
     ```bash
