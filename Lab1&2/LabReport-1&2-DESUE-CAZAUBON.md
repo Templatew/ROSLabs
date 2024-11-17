@@ -338,10 +338,10 @@
 
     ```yaml
     node_name:
-    ros__parameters:
-    linear_gain_x: 1.0
-    linear_gain_y: 1.0
-    angular_gain_z: 1.0
+        ros__parameters:
+            linear_gain_x: 1.0
+            linear_gain_y: 1.0
+            angular_gain_z: 1.0
     ```
 
     **launch.py**
