@@ -9,6 +9,9 @@
     - [First Hello World package](#first-hello-world-package)
     - [Turtlesim Publisher](#turtlesim-publisher)
     - [Turtlesim Joy Control](#turtlesim-joy-control)
+  - [Lab 2](#lab-2)
+    - [Launch](#launch)
+    - [Parameters](#parameters)
 
 ## Lab 1
 
@@ -258,7 +261,77 @@
     <depend>sensor_msgs</depend>
     ```
 
+- To test our new node. Same as before we need to launch both nodes in two terminals.
+    
+    ```bash
+    #First terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtlesim turtlesim_node
+    qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+    [INFO] [1731852837.026445475] [turtlesim]: Starting turtlesim with node name /turtlesim
+    [INFO] [1731852837.029203595] [turtlesim]: Spawning turtle [turtle1] at x=[5,544445], y=[5,544445], theta=[0,000000]
+    ```
+
+    ```bash
+    #Second terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtle_control turtle_joy
+    ```
+
+    ![Turtle Making Circles](/Lab1&2/img/05.png)
+
+- Now we can control the turtle with the joystick !
+
+## Lab 2
+
+### Launch
+
+- It's a bit annoying to launch in different terminals each node to use what we created in the previous lab, one solution is to use launch files. 
+  
+  Once executed all the nodes will be automatically launched, saving us some time. 
+
+- Inside our package we created a folder called `launch`, and wrote some **python** code. 
+  
+  **turtlesim_joy_launch.py**
+
+    ```python
+    from launch import LaunchDescription
+    from launch_ros.actions import Node
+    import os
+    from ament_index_python.packages import get_package_share_directory
+
+    def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='turtlesim',
+            executable='turtlesim_node',
+            name='turtlesim_node'
+        ),
+        Node(
+            package='joy',
+            executable='joy_node',
+            name='joy_node'
+        ),
+        Node(
+            package='turtle_control',
+            executable='turtle_joy',
+            name='turtle_joy'
+        ),
+    ])
+    ```
+- Time to test our launch file :
+
+    ```bash
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 launch turtle_control turtlesim_joy_launch.py
+    [INFO] [launch]: All log files can be found below /home/lorenz/.ros/log/2024-11-17-17-15-04-969365-Legion-19508
+    [INFO] [launch]: Default logging verbosity is set to INFO
+    [INFO] [turtlesim_node-1]: process started with pid [19509]
+    [INFO] [joy_node-2]: process started with pid [19511]
+    [INFO] [turtle_joy-3]: process started with pid [19513]
+    [turtlesim_node-1] qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+    [turtlesim_node-1] [INFO] [1731860105.060040919] [turtlesim_node]: Starting turtlesim with node name /turtlesim_node
+    [turtlesim_node-1] [INFO] [1731860105.062914182] [turtlesim_node]: Spawning turtle [turtle1] at x=[5,544445], y=[5,544445], theta=[0,000000]
+    ```
+
+### Parameters
 
 
--
     
