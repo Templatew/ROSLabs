@@ -276,7 +276,7 @@
     lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtle_control turtle_joy
     ```
 
-    ![Turtle Making Circles](/Lab1&2/img/05.png)
+    ![rqt](/Lab1&2/img/05.png)
 
 - Now we can control the turtle with the joystick !
 
@@ -295,7 +295,6 @@
     ```python
     from launch import LaunchDescription
     from launch_ros.actions import Node
-    import os
     from ament_index_python.packages import get_package_share_directory
 
     def generate_launch_description():
@@ -333,5 +332,104 @@
 
 ### Parameters
 
+- Now we'd like to be able to dynamically change some values in our code. To do so we are going to create a `config` folder and `params.yaml` file. 
+  
+    **params.yaml**
+
+    ```yaml
+    node_name:
+    ros__parameters:
+    linear_gain_x: 1.0
+    linear_gain_y: 1.0
+    angular_gain_z: 1.0
+    ```
+
+    **launch.py**
+
+    ```python
+    #add the following
+    import os
+    param_file = os.path.join(
+    get_package_share_directory('turtle_control'),
+    'config',
+    'params.yaml'
+    )
+    ```
+
+    **turtle_joy.cpp**
+
+    ```cpp
+    // Add the following in public:
+    this->declare_parameter("linear_gain_x", 1.0);
+    this->declare_parameter("linear_gain_y", 1.0);
+    this->declare_parameter("angular_gain", 1.0);   
+    ```
+    ```cpp
+    // Add the following in private:
+    auto linear_x = get_parameter("linear_gain_x").as_double();
+    auto linear_y = get_parameter("linear_gain_y").as_double();
+    auto angular_z = get_parameter("angular_gain").as_double();
+
+
+    twist.linear.x = msg->axes[1] * linear_x;
+    twist.linear.y = msg->axes[0] * linear_y;
+    twist.angular.z = msg->axes[3] * angular_z;
+    
+
+    RCLCPP_INFO(this->get_logger(), "Gains - linear_x: %f, linear_y: %f, angular_z: %f", linear_x, linear_y, angular_z); 
+    ```
+
+- Let's try to modify the values directly from the terminal :
+
+    ```bash
+    #First Terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 launch turtle_control turtlesim_joy_launch.py
+    [INFO] [launch]: All log files can be found below /home/lorenz/.ros/log/2024-11-17-17-39-08-112650-Legion-21021
+    [INFO] [launch]: Default logging verbosity is set to INFO
+    [INFO] [turtlesim_node-1]: process started with pid [21022]
+    [INFO] [joy_node-2]: process started with pid [21024]
+    [INFO] [turtle_joy-3]: process started with pid [21026]
+    [turtlesim_node-1] qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+    [turtlesim_node-1] [INFO] [1731861548.203783985] [turtlesim_node]: Starting turtlesim with node name /turtlesim_node
+    [turtlesim_node-1] [INFO] [1731861548.206426936] [turtlesim_node]: Spawning turtle [turtle1] at x=[5,544445], y=[5,544445], theta=[0,000000]
+    ```
+
+    ```bash
+    #Second Terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 param list
+    /joy_node:
+        autorepeat_rate
+        coalesce_interval_ms
+        deadzone
+        device_id
+        device_name
+        qos_overrides./parameter_events.publisher.depth
+        qos_overrides./parameter_events.publisher.durability
+        qos_overrides./parameter_events.publisher.history
+        qos_overrides./parameter_events.publisher.reliability
+        sticky_buttons
+        use_sim_time
+    /turtle_joy:
+        angular_gain
+        linear_gain_x
+        linear_gain_y
+        qos_overrides./parameter_events.publisher.depth
+        qos_overrides./parameter_events.publisher.durability
+        qos_overrides./parameter_events.publisher.history
+        qos_overrides./parameter_events.publisher.reliability
+        use_sim_time    
+    /turtlesim_node:
+        background_b
+        background_g
+        background_r
+        qos_overrides./parameter_events.publisher.depth
+        qos_overrides./parameter_events.publisher.durability
+        qos_overrides./parameter_events.publisher.history
+        qos_overrides./parameter_events.publisher.reliability
+        use_sim_time
+    
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 param set turtle_joy angular_gain 10.0
+    Set parameter successful
+    ```
 
     
