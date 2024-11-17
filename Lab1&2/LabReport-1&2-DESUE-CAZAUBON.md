@@ -3,16 +3,11 @@
 # Report: ROS Lab Sessions 1 & 2 CAZAUBON Lorenz - DESUE Léo
 
 ## Table of Contents
-- [Report: ROS Lab Sessions 1 \& 2](#report-ros-lab-sessions-1--2)
+- [Report: ROS Lab Sessions 1 \& 2 CAZAUBON Lorenz - DESUE Léo](#report-ros-lab-sessions-1--2-cazaubon-lorenz---desue-léo)
   - [Table of Contents](#table-of-contents)
   - [Lab 1](#lab-1)
     - [First Hello World package](#first-hello-world-package)
     - [Turtlesim](#turtlesim)
-
-
-<div style="page-break-after: always;"></div>
-
-
 
 ## Lab 1
 
@@ -55,11 +50,6 @@
     [INFO] [1731851400.604389317] [minimal_subscriber]: I heard: 'Hello, world! 5'
     ```
 
-
-<div style="page-break-after: always;"></div>
-
-
-
 ### Turtlesim
 
 - We launched both the turtlesim_node and turtle_teleop_key nodes in two terminals :
@@ -82,7 +72,7 @@
     'Q' to quit.
     ```
 
--  Then we used the following command to find what type of data we need to send to move the turtle.
+-  Then we used the following commands to find on which topic and what type of data we need to send to move the turtle.
 
     ```bash
     lorenz@Legion:~/Documents/ros2_ws$ ros2 topic list
@@ -91,8 +81,91 @@
     /turtle1/cmd_vel
     /turtle1/color_sensor
     /turtle1/pose
+
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 topic info /turtle1/cmd_vel
+    Type: geometry_msgs/msg/Twist
+    Publisher count: 1
+    Subscription count: 1
     ```
 
-    The answer is `/turtle1/cmd_vel`
+    **Topic:** `/turtle1/cmd_vel` 
+    
+    **Data:** `geometry_msgs/msg/Twist`
 
-- Now that we know wich type of data we need to send, we created a new package called `turtle_control`, in this package we added a **.cpp** 
+- Now that we know on wich topic and what data we need to publish we built a new package named `turtle_control` that used most of the code from our very first package `cpp_pubsub`.
+
+    We only had a few lines to modify for this to work :
+
+    **turtle_publisher.cpp**
+
+    ```cpp
+    #include <chrono>
+    #include <functional>
+    #include <memory>
+
+    #include "rclcpp/rclcpp.hpp"
+    #include "geometry_msgs/msg/twist.hpp"
+
+    using namespace std::chrono_literals;
+
+    class TurtlePublisher : public rclcpp::Node
+    {
+    public:
+        TurtlePublisher() : Node("turtle_publisher")
+        {
+            publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel", 10);
+            timer_ = this->create_wall_timer(
+                500ms, std::bind(&TurtlePublisher::publish_message, this));
+        }
+
+    private:
+        void publish_message()
+        {
+            auto message = geometry_msgs::msg::Twist();
+            message.linear.x = 1.0;  // Vitesse linéaire
+            message.angular.z = 0.5; // Vitesse angulaire
+            publisher_->publish(message);
+        }
+
+        rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
+        rclcpp::TimerBase::SharedPtr timer_;
+    };
+
+    int main(int argc, char *argv[])
+    {
+        rclcpp::init(argc, argv);
+        rclcpp::spin(std::make_shared<TurtlePublisher>());
+        rclcpp::shutdown();
+        return 0;
+    }
+    ```
+
+    **CMakeLists.txt**
+
+    ```cpp
+    //add the following
+    find_package(geometry_msgs REQUIRED)
+
+    add_executable(turtle_publisher src/turtle_publisher.cpp)  
+    ament_target_dependencies(turtle_publisher rclcpp geometry_msgs)
+
+    install(TARGETS turtle_publisher
+            DESTINATION lib/${PROJECT_NAME})
+    ```
+
+    **package.xml**
+
+    ```xml
+    <!--add the following-->
+    <depend>geometry_msgs</depend>
+    ```
+
+- Perfect ! Now we simply need to build our package, run it and turtlesim to enjoy a turtle make circles. xD
+
+
+    ```bash
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtle_control turtle_publisher
+    ```
+    
+    ![Turtle Making Circles](/img/04.png)
+    
