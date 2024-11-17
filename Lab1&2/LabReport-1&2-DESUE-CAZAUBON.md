@@ -1,6 +1,6 @@
 
 
-# Report: ROS Lab Sessions 1 & 2
+# Report: ROS Lab Sessions 1 & 2 CAZAUBON Lorenz - DESUE Léo
 
 ## Table of Contents
 - [Report: ROS Lab Sessions 1 \& 2](#report-ros-lab-sessions-1--2)
@@ -62,7 +62,27 @@
 
 ### Turtlesim
 
-- To find what type of data we need to send to the turtlesim_node to make the turtle move we simply launched this node and the turtle_teleop_key node and used the following bash command :
+- We launched both the turtlesim_node and turtle_teleop_key nodes in two terminals :
+
+    ```bash
+    #First terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtlesim turtlesim_node
+    qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+    [INFO] [1731852837.026445475] [turtlesim]: Starting turtlesim with node name /turtlesim
+    [INFO] [1731852837.029203595] [turtlesim]: Spawning turtle [turtle1] at x=[5,544445], y=[5,544445], theta=[0,000000]
+    ```
+
+    ```bash
+    #Second terminal
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtlesim turtle_teleop_key
+    Reading from keyboard
+    ---------------------------
+    Use arrow keys to move the turtle.
+    Use G|B|V|C|D|E|R|T keys to rotate to absolute orientations. 'F' to cancel a rotation.
+    'Q' to quit.
+    ```
+
+-  Then we used the following command to find what type of data we need to send to move the turtle.
 
     ```bash
     lorenz@Legion:~/Documents/ros2_ws$ ros2 topic list
@@ -73,6 +93,6 @@
     /turtle1/pose
     ```
 
+    The answer is `/turtle1/cmd_vel`
 
-
-- zdd
+- Now that we know wich type of data we need to send, we created a new package called `turtle_control`, in this package we added a **.cpp** 
