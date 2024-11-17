@@ -8,6 +8,7 @@
   - [Lab 1](#lab-1)
     - [First Hello World package](#first-hello-world-package)
     - [Turtlesim Publisher](#turtlesim-publisher)
+    - [Turtlesim Joy Control](#turtlesim-joy-control)
 
 ## Lab 1
 
@@ -169,4 +170,95 @@
     
     ![Turtle Making Circles](/Lab1&2/img/04.png)
 
+### Turtlesim Joy Control
+
+- For this part of the lab session, we created a new **.cpp** file called `turtle_joy.cpp` to control the turtle with the joystick.
+
+- Now we need to find out how the joy node works to get the data sent by the joystick and publish it to the turtlesim node. To do so, we will use the same process as before :
+
+    ```bash
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 topic list
+    /joy
+    /joy/set_feedback
+    /parameter_events
+    /rosout
+
+    lorenz@Legion:~/Documents/ros2_ws$ ros2 topic info /joy
+    Type: sensor_msgs/msg/Joy
+    Publisher count: 1
+    Subscription count: 0
+    ```
+    **Topic:** `/joy`
+
+    **Data:** `sensor_msgs/msg/Joy`
+
+- Next setp is to modify our code to subscribe to the joy_node and publish the commands to the turtlesim_node. 
+  
+    Here's the code :
+
+    **turtle_joy.cpp**
+
+    ```cpp
+    #include "rclcpp/rclcpp.hpp"
+    #include "geometry_msgs/msg/twist.hpp"
+    #include "sensor_msgs/msg/joy.hpp"
+
+    class TurtleJoy : public rclcpp::Node {
+    public:
+        TurtleJoy() : Node("turtle_joy") {
+
+            publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel", 10);
+        
+            subscription_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy", 10, std::bind(&TurtleJoy::joy_callback, this, std::placeholders::_1));
+        }
+
+    private:
+        void joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg) {
+
+            auto twist = geometry_msgs::msg::Twist();
+
+            twist.linear.x = msg->axes[1];
+            twist.linear.y = msg->axes[0];
+            twist.angular.z = msg->axes[3];
+
+            RCLCPP_INFO(this->get_logger(), "Values - v_x: %f, v_y: %f, a_z: %f", msg->axes[1], msg->axes[0], msg->axes[3]);
+
+            publisher_->publish(twist);
+        }
+
+        rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
+        rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
+    };
+
+    int main(int argc, char * argv[]) {
+        rclcpp::init(argc, argv);
+        rclcpp::spin(std::make_shared<TurtleJoy>());
+        rclcpp::shutdown();
+        return 0;
+    }
+    ```
+
+    **CMakeLists.txt**
+
+    ```cpp
+    // Add the following
+    find_package(sensor_msgs REQUIRED)
+
+    add_executable(turtle_joy src/turtle_joy.cpp)  
+    ament_target_dependencies(turtle_joy rclcpp geometry_msgs sensor_msgs)
+
+    install(TARGETS turtle_joy
+            DESTINATION lib/${PROJECT_NAME})
+    ```
+
+    **package.xml**
+
+    ```xml
+    <!--add the following-->
+    <depend>sensor_msgs</depend>
+    ```
+
+
+
+-
     
