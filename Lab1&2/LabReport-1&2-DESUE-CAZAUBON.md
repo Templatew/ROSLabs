@@ -167,5 +167,5 @@
     lorenz@Legion:~/Documents/ros2_ws$ ros2 run turtle_control turtle_publisher
     ```
     
-    ![Turtle Making Circles](/img/04.png)
+    ![Turtle Making Circles](/Lab1&2/img/04.png)
     
