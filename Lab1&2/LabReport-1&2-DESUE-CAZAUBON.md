@@ -7,7 +7,7 @@
   - [Table of Contents](#table-of-contents)
   - [Lab 1](#lab-1)
     - [First Hello World package](#first-hello-world-package)
-    - [Turtlesim](#turtlesim)
+    - [Turtlesim Publisher](#turtlesim-publisher)
 
 ## Lab 1
 
@@ -50,7 +50,7 @@
     [INFO] [1731851400.604389317] [minimal_subscriber]: I heard: 'Hello, world! 5'
     ```
 
-### Turtlesim
+### Turtlesim Publisher
 
 - We launched both the turtlesim_node and turtle_teleop_key nodes in two terminals :
 
@@ -168,4 +168,5 @@
     ```
     
     ![Turtle Making Circles](/Lab1&2/img/04.png)
+
     

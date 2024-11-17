@@ -1,6 +1,0 @@
-Invoking command in '/home/lorenz/Documents/ros2_ws/build/turtle_control': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/lorenz/Documents/ros2_ws/src/turtle_control -DCMAKE_INSTALL_PREFIX=/home/lorenz/Documents/ros2_ws/install/turtle_control
-Invoked command in '/home/lorenz/Documents/ros2_ws/build/turtle_control' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/lorenz/Documents/ros2_ws/src/turtle_control -DCMAKE_INSTALL_PREFIX=/home/lorenz/Documents/ros2_ws/install/turtle_control
-Invoking command in '/home/lorenz/Documents/ros2_ws/build/turtle_control': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/lorenz/Documents/ros2_ws/build/turtle_control -- -j32 -l32
-Invoked command in '/home/lorenz/Documents/ros2_ws/build/turtle_control' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/lorenz/Documents/ros2_ws/build/turtle_control -- -j32 -l32
-Invoking command in '/home/lorenz/Documents/ros2_ws/build/turtle_control': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/lorenz/Documents/ros2_ws/build/turtle_control
-Invoked command in '/home/lorenz/Documents/ros2_ws/build/turtle_control' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/lorenz/Documents/ros2_ws/build/turtle_control

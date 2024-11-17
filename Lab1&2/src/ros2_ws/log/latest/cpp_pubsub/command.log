@@ -1,4 +1,0 @@
-Invoking command in '/home/lorenz/Documents/ros2_ws/build/cpp_pubsub': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/lorenz/Documents/ros2_ws/build/cpp_pubsub -- -j32 -l32
-Invoked command in '/home/lorenz/Documents/ros2_ws/build/cpp_pubsub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/lorenz/Documents/ros2_ws/build/cpp_pubsub -- -j32 -l32
-Invoking command in '/home/lorenz/Documents/ros2_ws/build/cpp_pubsub': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/lorenz/Documents/ros2_ws/build/cpp_pubsub
-Invoked command in '/home/lorenz/Documents/ros2_ws/build/cpp_pubsub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/lorenz/Documents/ros2_ws/build/cpp_pubsub

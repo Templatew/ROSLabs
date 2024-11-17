@@ -1,5 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000199] (-) JobUnselected: {'identifier': 'cpp_pubsub'}
-[0.000218] (-) JobUnselected: {'identifier': 'temp'}
-[0.000230] (-) JobUnselected: {'identifier': 'turtle_control'}
-[0.000243] (-) EventReactorShutdown: {}
