@@ -1,0 +1,6 @@
+# Report: ROS Lab Sessions 3 CAZAUBON Lorenz - DESUE Léo
+
+
+```bash
+    ros2 launch interbotix_xsarm_moveit_interface xsarm_moveit_interface.launch.py robot_model:=px100 use_cpp_interface:=true use_actual:=true dof:=4
+```
